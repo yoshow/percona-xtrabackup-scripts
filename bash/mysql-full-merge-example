@@ -5,7 +5,7 @@
 # 完整备份的文件位置
 fulldir=/usr/local/xtrabackup/full/
 # 备份的文件位置 需要根据实际情况修改
-basedir=/usr/local/xtrabackup/base/2017-08-10_11-03-25
+basedir=/usr/local/xtrabackup/base/2017-08-08_03-00-00
 # 增量备份文件位置
 incremental=/usr/local/xtrabackup/incremental/
 
@@ -24,9 +24,9 @@ done;
 cp -r $basedir/. $fulldir
 
 # 执行全量备份
-echo innobackupex --apply-log --redo-only $fulldir 
+# echo innobackupex --apply-log --redo-only $fulldir 
 innobackupex --apply-log --redo-only $fulldir
 
 # 执行增量备份 如果有多个则执行多次
-echo innobackupex --apply-log --redo-only --incremental-dir=${incremental}/2017-08-10_11-06-41 --incremental $fulldir
-innobackupex --apply-log --redo-only --incremental-dir=${incremental}/2017-08-10_11-06-41 --incremental $fulldir
+# echo innobackupex --apply-log --redo-only --incremental-dir=${incremental}/2017-08-08_03-00-00 --incremental $fulldir
+innobackupex --apply-log --redo-only --incremental-dir=${incremental}/2017-08-09_03-00-00 --incremental $fulldir

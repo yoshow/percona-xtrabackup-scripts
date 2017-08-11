@@ -10,8 +10,8 @@
 
 ### 创建备份帐号 
 
-```
-CREATE USER 'xtrabackup'@'localhost' IDENTIFIED BY 'xtra$password';
+``` SQL
+CREATE USER 'xtrabackup'@'localhost' IDENTIFIED BY 'xtra@password';
 GRANT SELECT, SHOW VIEW, RELOAD, LOCK TABLES, PROCESS, REPLICATION CLIENT ON *.* TO 'xtrabackup'@'localhost';
 FLUSH PRIVILEGES;
 ```
@@ -28,9 +28,13 @@ FLUSH PRIVILEGES;
 ### 复制备份脚本示例 
 然后将项目的内容拷贝到 xtrabackup 文件夹
 
-    |--  /usr/local/xtrabackup/bash
-    |-- incremental         // 增量备份默认位置
-    |-- incremental         // 增量备份默认位置
+    |-- /usr/local/xtrabackup/bash
+    |-- mysql-base-backup-example         // 全量备份脚本模板
+    |-- mysql-base-restore-example        // 全量还原脚本模板
+    |-- mysql-clear-backup-example        // 清理备份脚本模板
+    |-- mysql-full-merge-example          // 全量备份和增量备份合并脚本模板
+    |-- mysql-full-restore-example        // 全量备份和增量备份合并后还原脚本模板
+    |-- mysql-incremental-backup-example  // 增量备份脚本模板
 
 ### 从模板复制脚本
 
