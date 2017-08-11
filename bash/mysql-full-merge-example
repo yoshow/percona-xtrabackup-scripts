@@ -1,0 +1,32 @@
+#!/bin/bash
+# Program
+#  use xtasback to fully backup mysql data per week!
+
+# 完整备份的文件位置
+fulldir=/usr/local/xtrabackup/full/
+# 备份的文件位置 需要根据实际情况修改
+basedir=/usr/local/xtrabackup/base/2017-08-10_11-03-25
+# 增量备份文件位置
+incremental=/usr/local/xtrabackup/incremental/
+
+mysql_daemon=/usr/local/mysql/mysqld
+
+mysql_data_dir=/usr/local/mysql/data
+
+# 完整的备份文件位置
+cd ${fulldir}
+
+for dir in `ls -t`;
+do
+ [ -d $dir ] && rm -rf $dir;
+done;
+
+cp -r $basedir/. $fulldir
+
+# 执行全量备份
+echo innobackupex --apply-log --redo-only $fulldir 
+innobackupex --apply-log --redo-only $fulldir
+
+# 执行增量备份 如果有多个则执行多次
+echo innobackupex --apply-log --redo-only --incremental-dir=${incremental}/2017-08-10_11-06-41 --incremental $fulldir
+innobackupex --apply-log --redo-only --incremental-dir=${incremental}/2017-08-10_11-06-41 --incremental $fulldir

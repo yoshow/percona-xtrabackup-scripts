@@ -1,0 +1,48 @@
+#!/bin/bash
+# 清理过期备份脚本
+
+# 全量备份的文件位置
+basedir=/usr/local/xtrabackup/base/
+# 增量备份文件位置
+incremental=/usr/local/xtrabackup/incremental/
+# 备份过期天数 建议设置的值大于7天
+expired_days=7
+
+expired_date=`date -d "-${expired_days-1} days" "+%Y%m%d"`
+
+echo expired date: ${expired_date}
+echo base dir: ${basedir}
+echo incremental dir: ${incremental}
+
+echo $basedir - cleaning
+
+# 最新的备份文件位置
+cd ${basedir}
+pwd
+
+for dir in `ls -d */`;
+do
+  # 处理日期信息
+  created_date=${dir//-/} && created_date=${created_date%_*}
+
+  # 输出调试信息
+  # echo $dir \# $created_date - $expired_date
+
+  [ ${created_date} -lt $expired_date ] && rm -rf $dir;
+done;
+
+# 增量备份文件位置
+echo ${incremental} cleaning
+
+cd '${incremental}'
+
+for dir in `ls -d */`;
+do
+  # 处理日期信息
+  created_date=${dir//-/} && created_date=${created_date%_*}
+  
+  # 输出调试信息
+  # echo $dir \# $created_date - $expired_date
+
+  [ ${created_date} -lt $expired_date ] && rm -rf $dir;
+done;

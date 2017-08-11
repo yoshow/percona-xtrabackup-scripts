@@ -1,0 +1,20 @@
+#!/bin/bash
+# Program
+#  use xtasback to fully backup mysql data per week!
+
+# 备份的文件位置 需要根据实际情况修改
+basedir=/usr/local/xtrabackup/full
+
+mysql_daemon=/usr/local/mysql/mysqld
+
+mysql_data_dir=/usr/local/mysql/data
+
+$mysql_daemon stop
+
+rm -rf $mysql_data_dir/*
+
+innobackupex --copy-back $basedir
+
+chown -R mysql:mysql $mysql_data_dir/*
+
+$mysql_daemon start

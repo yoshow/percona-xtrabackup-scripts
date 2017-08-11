@@ -1,0 +1,19 @@
+#!/bin/bash
+# XtrasBackup 全量还原脚本
+
+# 备份的文件位置 需要根据实际情况修改
+basedir=/usr/local/xtrabackup/base/2017-08-08_03-00-00
+
+mysql_daemon=/usr/local/mysql/mysqld
+
+mysql_data_dir=/usr/local/mysql/data
+
+$mysql_daemon stop
+
+rm -rf $mysql_data_dir/*
+
+innobackupex --copy-back $basedir
+
+chown -R mysql:mysql $mysql_data_dir/*
+
+$mysql_daemon start

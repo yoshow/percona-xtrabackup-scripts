@@ -1,0 +1,35 @@
+#!/bin/bash
+# XtrasBackup 增量备份脚本
+
+# =========================================
+# 根据实际情况修改下面参数
+# =========================================
+
+# 帐号
+user=xtrabackup
+# 密码
+password=xtra$password
+# # MySQL 配置文件
+defaults_file=/etc/my.cnf
+# MySQL Socket File
+socket=/usr/local/mysql/mysql.sock
+# 备份的文件位置
+basedir=/usr/local/xtrabackup/base/
+# 增量备份文件位置
+incremental=/usr/local/xtrabackup/incremental/
+
+# 最新的备份文件位置
+cd ${basedir}
+
+latest_basedir=''
+for dir in `ls -t`;
+do
+ [ -d $dir ] && latest_basedir=$dir && break;
+done;
+
+# 完整备份的位置
+incremental_basedir=${basedir}/$latest_basedir
+
+# 调试命令
+# echo innobackupex --defaults-file=${defaults_file} --user=$user --password=${password} --socket=$socket --incremental-basedir=${incremental_basedir} --incremental ${incremental}
+innobackupex --defaults-file=${defaults_file} --user=$user --password=${password} --socket=$socket --incremental-basedir=${incremental_basedir} --incremental ${incremental}
