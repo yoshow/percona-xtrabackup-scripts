@@ -4,11 +4,22 @@
 测试环境 CentOS 7.2 + MySQL 5.7
 
 ## 如何安装 XtraBackup 
+```
+cd /usr/local/src
+
+wget https://www.percona.com/downloads/XtraBackup/Percona-XtraBackup-2.4.4/\
+binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.4-1.el7.x86_64.rpm
+
+yum localinstall percona-xtrabackup-24-2.4.4-1.el7.x86_64.rpm
+```
+
 可以参考 https://www.percona.com/doc/percona-xtrabackup/2.4/installation.html
 
 ## 如何使用
 
 ### 创建备份帐号 
+
+在 MySQL 中执行如下命令:
 
 ``` SQL
 CREATE USER 'xtrabackup'@'localhost' IDENTIFIED BY 'xtra@password';
@@ -29,6 +40,7 @@ FLUSH PRIVILEGES;
 然后将项目的内容拷贝到 xtrabackup 文件夹
 
     |-- /usr/local/xtrabackup/bash
+    |-- mysql-backup-example              // 全量备份和增量备份整合脚本模板
     |-- mysql-base-backup-example         // 全量备份脚本模板
     |-- mysql-base-restore-example        // 全量还原脚本模板
     |-- mysql-clear-backup-example        // 清理备份脚本模板

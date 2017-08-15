@@ -1,0 +1,55 @@
+#!/bin/bash
+# XtrasBackup 一周全量和增量自动备份脚本
+
+# =========================================
+# 根据实际情况修改下面参数
+# =========================================
+
+# 帐号
+user=xtrabackup
+# 密码
+password=xtra@password
+# # MySQL 配置文件
+defaults_file=/usr/local/mysql/etc/my.cnf
+# MySQL Socket File
+socket=/usr/local/mysql/mysql.sock
+# 备份的文件位置
+basedir=/usr/local/xtrabackup/base/
+# 增量备份文件位置
+incremental=/usr/local/xtrabackup/incremental/
+# 全量备份的日期 范围 0-6 
+base_backup_day=0
+# 昨天的信息 
+today=`date -d "-1 days" "+%w"`
+# 昨天的信息 
+yesterday=`date -d "-1 days" "+%w"`
+
+if [today -eq base_backup_day] 
+  # 全量备份 
+  innobackupex --defaults-file=${defaults_file} --user=${user} --password=${password} --socket=${socket} --no-lock ${basedir}
+else
+  # 增量备份
+  
+  # 如果昨天等于全量备份的时间, 则切换到全量备份
+  if [yesterday -eq base_backup_day] 
+    incremental_basedir=${basedir}
+  else
+    incremental_basedir=${incremental}
+  fi
+
+  # 最新的备份文件位置
+  cd {incremental_basedir} 
+
+  latest_basedir=''
+  for dir in `ls -t`;
+  do
+    [ -d $dir ] && latest_basedir=$dir && break;
+  done;
+
+  # 上一次备份的位置
+  incremental_basedir=${incremental_basedir}/$latest_basedir
+
+  # 调试命令
+  # echo innobackupex --defaults-file=${defaults_file} --user=$user --password=${password} --socket=$socket --incremental-basedir=${incremental_basedir} --incremental ${incremental}
+  innobackupex --defaults-file=${defaults_file} --user=$user --password=${password} --socket=$socket --incremental-basedir=${incremental_basedir} --incremental ${incremental}
+fi

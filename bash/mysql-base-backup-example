@@ -8,7 +8,7 @@
 # 帐号
 user=xtrabackup
 # 密码
-password=xtra$password
+password=xtra@password
 # MySQL 配置文件
 defaults_file=/etc/my.cnf
 # MySQL Socket File
